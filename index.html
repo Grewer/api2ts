@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>api2ts</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        textarea {
+            float: left;
+            width: 40%;
+            height: 100%
+        }
+
+        #parse {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+
+<textarea id="source"></textarea>
+<button id="transform">转换</button>
+<textarea id="parse"></textarea>
+</body>
+<script type="application/javascript">
+    function getType(data) {
+        if (typeof data === 'object') {
+            if (typeof data.length !== 'undefined') {
+                if (data.length > 0) {
+                    return `Array<${getType(data[0])}>`
+                } else {
+                    return 'Array<any>'
+                }
+            }
+            const keys = Object.keys(data)
+            if (keys.length === 0) {
+                return 'object'
+            }
+            let a = Object.keys(data).map(v => {
+                const type = getType(data[v])
+                return `${v}: ${type}`
+            }).join(',\n')
+            a = `{\n${a}\n}`
+            return a
+        } else {
+            return typeof data
+        }
+    }
+
+    const {parse, source, transform} = window
+
+    transform.onclick = () => {
+        console.log(source.value)
+        let data
+        try {
+            data = JSON.parse(source.value)
+        } catch (e) {
+            console.log(e)
+            alert('解析失败,原因: API  json 解析失败')
+        }
+
+        if (!data) {
+            return
+        }
+
+        try {
+
+            const code = getType(data)
+
+            console.log(code)
+
+            parse.value = code
+
+        } catch (e) {
+            alert('解析失败,原因: 转换失败')
+        }
+    }
+
+    // todo source 中不能有 单引号
+    // TODO 样式
+</script>
+</html>

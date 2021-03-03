@@ -3,7 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>api2ts</title>
+    <Link rel="stylesheet" href="https://cdn.staticfile.org/milligram/1.4.1/milligram.min.css">
     <style>
+        .button-blue {
+            background-color: #02a3fa;
+            border-color: #02a3fa;
+        }
+
+        .button-blue.button-clear,
+        .button-blue.button-outline {
+            background-color: transparent;
+            color: #02a3fa;
+        }
+
+        .button-blue.button-clear {
+            border-color: transparent;
+        }
+
+        input[type='color']:focus, input[type='date']:focus, input[type='datetime']:focus, input[type='datetime-local']:focus, input[type='email']:focus, input[type='month']:focus, input[type='number']:focus, input[type='password']:focus, input[type='search']:focus, input[type='tel']:focus, input[type='text']:focus, input[type='url']:focus, input[type='week']:focus, input:not([type]):focus, textarea:focus, select:focus {
+            border-color: #02a3fa;
+            outline: 0;
+        }
+
         html, body {
             width: 100%;
             height: 100%;
@@ -12,21 +33,37 @@
         }
 
         textarea {
-            float: left;
-            width: 40%;
-            height: 100%
+            height: 500px
         }
 
-        #parse {
-            float: right;
+        .title {
+            margin: 20px 0 20px 0;
+        }
+
+        #transform {
+            margin-bottom: 20px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
+<div class="container">
+    <div class="row title">
+        <div class="column">js 数据结构转换为 ts 类型</div>
+    </div>
+    <div class="row">
+        <div class="column column-40">
+            <textarea placeholder='例如{"a":1}' id="source"></textarea>
+        </div>
+        <div class="column">
+            <a class="button button-blue" id="transform" href="#">转换</a>
+        </div>
+        <div class="column column-40">
+            <textarea readonly id="parse"></textarea>
+        </div>
+    </div>
+</div>
 
-<textarea id="source"></textarea>
-<button id="transform">转换</button>
-<textarea id="parse"></textarea>
 </body>
 <script type="application/javascript">
     function getType(data) {
@@ -44,7 +81,7 @@
             }
             let a = Object.keys(data).map(v => {
                 const type = getType(data[v])
-                return `${v}: ${type}`
+                return `  ${v}: ${type}`
             }).join(',\n')
             a = `{\n${a}\n}`
             return a

@@ -53,7 +53,7 @@
     </div>
     <div class="row">
         <div class="column column-40">
-            <textarea placeholder='例如{"a":1}' id="source"></textarea>
+            <textarea placeholder='例如{a:1}' id="source"></textarea>
         </div>
         <div class="column">
             <a class="button button-blue" id="transform" href="#">转换</a>
@@ -98,8 +98,18 @@
         try {
             data = JSON.parse(source.value)
         } catch (e) {
-            console.log(e)
-            alert('解析失败,原因: API  json 解析失败')
+            console.log(1, e)
+            try {
+                window.temp = eval(`window.temp = ${source.value}`)
+            } catch (e) {
+                console.log(2, e)
+                alert('解析失败,原因: API  json 解析失败')
+            }
+            if (!window.temp) {
+                alert('解析失败,原因: API  json 解析失败')
+            } else {
+                data = window.temp
+            }
         }
 
         if (!data) {
@@ -118,8 +128,5 @@
             alert('解析失败,原因: 转换失败')
         }
     }
-
-    // todo source 中不能有 单引号
-    // TODO 样式
 </script>
 </html>
